@@ -1,10 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+
 :root {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   --background: #ffffff;
-  --foreground: #171717;
+  --primary-color: #201b51;
+  --neutral-color: #f1f0fa;
+  --accent-color: #f27228;
+  --dark-color: #0b0b0b;
+  --white-color: #ffffff;
+}
+
+*, html {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  scroll-padding-top: 75px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,7 +35,49 @@
 }
 
 body {
-  color: var(--foreground);
+  padding: 0;
+  margin: 0;
+  overflow-x: hidden;
+  background-color: var(--shade-color);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--primary-color);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Poppins';
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  color: var(--primary-color);
+  font-family: 'Roboto', sans-serif;
+  font-size: 28px;
+}
+
+p {
+  color: var(--dark-color);
+  font-family: 'Open Sans', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  font-size: 17px;
+}
+
+ul, li {
+  text-decoration: none;
+  list-style: none;
+}
+
+img {
+  width: 100%;
+  height: auto !important;
+}
+
+a, button {
+  text-decoration: none;
+  color: var(--primary-color);
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  text-transform: capitalize;
 }
