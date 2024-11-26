@@ -34,7 +34,7 @@ This repository contains the codebase for the **WSMApp** project. The repository
   - Pull requests from `features` branches are merged here after code reviews.
 
 - **Testing**:
-  - Code in this branch is tested internally by the team.
+  - Code in this branch is tested internally by the development team.
 
 ---
 
