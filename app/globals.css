@@ -14,7 +14,7 @@
   --background: #ffffff;
   --primary-color: #201b51;
   --neutral-color: #f1f0fa;
-  --accent-color: #f27228;
+  --accent-color: #e16d17;
   --dark-color: #0b0b0b;
   --white-color: #ffffff;
 }
@@ -27,12 +27,12 @@
   scroll-padding-top: 75px;
 }
 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
-}
+} */
 
 body {
   padding: 0;
@@ -80,4 +80,14 @@ a, button {
   font-family: 'Roboto', sans-serif;
   font-size: 15px;
   text-transform: capitalize;
+  height: 48px;
+}
+
+label {
+  font-size: 14px;
+}
+
+.box {
+  height: 38px;
+  padding: 0 0 0 10px;
 }
