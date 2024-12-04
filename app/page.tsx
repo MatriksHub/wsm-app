@@ -37,7 +37,7 @@ export default function Home() {
         </Link>
 
         <Link href="/signup"
-        className="border bg-[#e16d17] px-9 py-2 rounded-[5px] text-[#ffffff]"
+        className="border bg-[#e16d17] px-8 py-2 rounded-[5px] text-[#ffffff]"
         >Create Account</Link>
       </div>
 
