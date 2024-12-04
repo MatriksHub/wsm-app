@@ -21,7 +21,7 @@ export default function Home() {
       {/* logo */}
       <div className="pb-6">
         <Image src={matrikslogo4}
-        alt="logo"
+        alt="matrikshublogo"
         className="w-full h-full"
         />
       </div>
