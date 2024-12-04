@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import cover_image from '../../../public/worspace.jpeg';
 import logo from '../../../public/matrikslogo.png';
@@ -11,11 +12,15 @@ import { toast } from 'react-toastify';
 
 function Login() {
 
-    const [show, setShow] = useState(false)
+    const router = useRouter();
 
+
+    // state
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [show, setShow] = useState(false);
 
+        // handle submit
     const handleLogIn = async (e: any) => {
         e.preventDefault();
     
@@ -32,7 +37,7 @@ function Login() {
       
       
             // navigate user to Login page
-            // navigate('/books')
+            router.push('/dashboard')
       
             
           } catch (error) {
@@ -71,7 +76,7 @@ function Login() {
 
             <div className="w-[350px] border border-[#201b51] rounded-[5px] shadow-2xl p-8 ">
                 
-                <form onSubmit={handleLogIn} className='flex flex-col gap-3'>
+                <form onSubmit={handleLogIn} className='w-full flex flex-col gap-3'>
                     <div className="py-1 w-full relative">
                         <label htmlFor="email" className="font-semibold">Email</label>
                         <input
@@ -111,7 +116,7 @@ function Login() {
 
                     <button 
                         type="submit"
-                        className="w-full border-2 border-[#e16d17] text-[#201b51] font-bold rounded-lg my-2"
+                        className="w-full border-2 border-[#e16d17] text-[#201b51] font-bold rounded-lg my-4"
                     >
                         Login
                     </button>
