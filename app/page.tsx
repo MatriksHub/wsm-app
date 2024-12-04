@@ -26,7 +26,7 @@ export default function Home() {
         />
       </div>
       <div className="flex items-center justify-center">
-        <p className="w-full text-[45px] leading-[52px] text-center font-bold text-[var(--primary-color)]">
+        <p className="w-full text-[46px] leading-[52px] text-center font-bold text-[var(--primary-color)]">
           Work Spaces just got better with Matrikshub
         </p>
       </div>
