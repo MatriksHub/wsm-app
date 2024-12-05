@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as z from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 // import { toast } from "react-toastify";
 import Image from "next/image";
 import cover_image from "../../../public/worspace.jpeg";
@@ -31,7 +31,7 @@ const FormSchema = z
 
 const SignUp = () => {
 
-    const router = useRouter();
+    // const router = useRouter();
 
     // show and hide password
     const [showP, setShowP] = useState(false);
