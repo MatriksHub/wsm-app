@@ -1,51 +1,45 @@
 "use client"
 
+import { useForm } from 'react-hook-form';
+import * as z from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import cover_image from '../../../public/worspace.jpeg';
 import logo from '../../../public/matrikslogo.png';
 import Link from 'next/link';
+// import { useRouter } from 'next/navigation';
 import { FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 
 
-function Login() {
+const FormSchema = z
+    .object({
+        email: z.string().min(1, 'Email is required').email('Invalid email'),
+        password: z
+        .string()
+        .min(1, 'Password is required')
+        .min(8, 'Password must have than 8 characters'),
+    });
+  
+  const Login = () => {
 
-    const router = useRouter();
+    // const router = useRouter();
 
-
-    // state
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+     // show and hide password
     const [show, setShow] = useState(false);
 
-        // handle submit
-    const handleLogIn = async (e: any) => {
-        e.preventDefault();
-    
-        const formLogin = {
-            email, password
-        }
-    
-        // submit form
-        try {
-            const url = '/api/user/login'
-            await fetch(url, );
-            toast.success('Login successful');
-            console.log(formLogin);
-      
-      
-            // navigate user to Login page
-            router.push('/dashboard')
-      
-            
-          } catch (error) {
-            console.error('Error in Login');
-            toast.error('Failed to Login');
-          }
-      
-        }
+    const form = useForm<z.infer<typeof FormSchema>>({
+      resolver: zodResolver(FormSchema),
+      defaultValues: {
+        email: '',
+        password: '',
+      },
+    });
+  
+    const onSubmit = (values: z.infer<typeof FormSchema>) => {
+      console.log(values);
+    };
     
 
   return (
@@ -76,17 +70,17 @@ function Login() {
 
             <div className="w-[350px] border border-[#201b51] rounded-[5px] shadow-2xl p-8 ">
                 
-                <form onSubmit={handleLogIn} className='w-full flex flex-col gap-3'>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='w-full flex flex-col gap-3'>
                     <div className="py-1 w-full relative">
                         <label htmlFor="email" className="font-semibold">Email</label>
                         <input
                             type="email"
-                            value={email}
-                            placeholder="Enter email"
+                            // value={email}
+                            placeholder="mail@example.com"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="email"
                             id="email"
-                            onChange={(e) => setEmail(e.target.value)}
+                            // onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                         <FaEnvelope className='absolute top-[55%] right-3' />
@@ -96,23 +90,17 @@ function Login() {
                         <label htmlFor="password" className="font-semibold">Password</label>
                         <input
                             type={!show ? "password" : "text"}
-                            value={password}
-                            placeholder="Enter password"
+                            // value={password}
+                            placeholder="Enter your password"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="password"
                             id="password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            // onChange={(e) => setPassword(e.target.value)}
                             required
                         />
                         {show && <FaEye onClick={() => setShow(!show)} className='absolute top-[55%] right-3' />} 
                         {!show && <FaEyeSlash onClick={() => setShow(!show)} className='absolute top-[55%] right-3' />} 
                     </div>
-
-                    {/* <span className='text-end'>
-                        <Link href='/' className='text-[12px] text-[#201b51] font-semibold'>
-                            Forget Password?
-                        </Link>
-                    </span> */}
 
                     <button 
                         type="submit"
@@ -123,7 +111,7 @@ function Login() {
 
                     <div className='flex gap-2 items-center justify-center w-full'>
                         <span className='text-[#201b51] text-[14px] font-semibold'>
-                            Don't have an account? 
+                            Don&apos;t have an account? 
                         </span>
                         <span className=''>
                             <Link href='/signup' className=' font-extrabold text-[#e16d17] cursor-pointer'>
@@ -137,7 +125,7 @@ function Login() {
         </div>
 
     </div>
-  )
+  );
 }
 
 export default Login;
