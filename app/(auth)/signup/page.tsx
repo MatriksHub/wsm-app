@@ -1,58 +1,56 @@
 "use client"
 
-import { useState } from "react";
-// import Router, { useRouter } from "next/router";
+import React, { useState } from "react";
+import { useForm } from 'react-hook-form';
+import * as z from "zod";
+import { zodResolver } from '@hookform/resolvers/zod';
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+// import { toast } from "react-toastify";
 import Image from "next/image";
 import cover_image from "../../../public/worspace.jpeg";
 import logo from '../../../public/matrikslogo.png';
-import Link from "next/link";
-import { toast } from "react-toastify";
-import { FaEnvelope, FaLock, FaUnlock, FaUser } from "react-icons/fa";
-// import { LuUser } from "react-icons/lu";
+import { FaEnvelope, FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
+// import axios from "axios";
+
+const FormSchema = z
+  .object({
+    name: z.string().min(1, 'Name is required').max(100),
+    email: z.string().min(1, 'Email is required').email('Invalid email'),
+    password: z
+      .string()
+      .min(1, 'Password is required')
+      .min(8, 'Password must have than 8 characters'),
+    confirmPassword: z.string().min(1, 'Password confirmation is required'),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Password do not match',
+  });
 
 
-function SignUp() {
+const SignUp = () => {
 
-    const [showP, setShowP] = useState(false)
-    const [showCP, setShowCP] = useState(false)
+    const router = useRouter();
 
-    // state
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+    // show and hide password
+    const [showP, setShowP] = useState(false);
+    const [showCP, setShowCP] = useState(false);
 
-    // handle submit
-    const handleSignUp = async (e: any) => {
-        e.preventDefault();
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+          name: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+        },
+      });
     
-        // password match
-        if (password !== confirmPassword) {
-            console.log('Password does not match');
-            toast.error('Password does not match');
-            return;
-        }
+      const onSubmit = (values: z.infer<typeof FormSchema>) => {
+        console.log(values);
+      };
 
-        try {
-            // form submit
-            const formSignup = {
-                fullName, email, password
-            };
-
-            const url = '/api/user/signup';
-
-            await fetch(url, );
-            toast.success('Form submitted successfully');
-            console.log(formSignup);
-    
-            // navigate user to Login page
-            // navigate('/login')
-         } catch (error) {
-            console.error('Error Submitting Form');
-            toast.error('Failed to submit form');
-         }
-        
-        }
 
 
   return (
@@ -77,79 +75,87 @@ function SignUp() {
                 />
             </div>
 
-            <h1 className="flex items-center justify-center text-4xl font-bold pt-5 pb-2">
+            <h1 className="flex items-center justify-center text-4xl font-bold pt-3 pb-2">
                 Register
             </h1>
 
-            <div className="border border-[#201b51] rounded-[5px] shadow-2xl p-8 ">
+            <div className="border border-[#201b51] rounded-[5px] shadow-2xl px-8 py-4">
                 
-                <form onSubmit={handleSignUp}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className='w-full flex flex-col gap-3'>
                     <div className="py-1 w-full relative">
-                        <label htmlFor="fullName" className="font-semibold">Name</label>
+                        <label htmlFor="fullName" className="font-semibold">
+                            Name
+                        </label>
                         <input
                             type="text"
-                            value={fullName}
-                            placeholder="Enter name"
+                            // value={name}
+                            placeholder="John Doe"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
-                            name="fullname"
-                            id="fullName"
-                            onChange={(e) => setFullName(e.target.value)}
+                            name="name"
+                            id="name"
+                            // onChange={(e) => setName(e.target.value)}
                             required
                         />
                         <FaUser className='absolute top-[55%] right-3' />
                     </div>
 
                     <div className="py-1 w-full relative">
-                        <label htmlFor="email" className="font-semibold">Email</label>
+                        <label htmlFor="email" className="font-semibold">
+                            Email
+                        </label>
                         <input
                             type="email"
-                            value={email}
-                            placeholder="Enter email"
+                            // value={email}
+                            placeholder="mail@example.com"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="email"
                             id="email"
-                            onChange={(e) => setEmail(e.target.value)}
+                            // onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                         <FaEnvelope className='absolute top-[55%] right-3' />
                     </div>
 
                     <div className="py-1 w-full relative">
-                        <label htmlFor="password" className="font-semibold">Password</label>
+                        <label htmlFor="password" className="font-semibold">
+                            Password
+                        </label>
                         <input
                             type={!showP ? "password" : "text"}
-                            value={password}
-                            placeholder="Enter password"
+                            // value={password}
+                            placeholder="Enter your password"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="password"
                             id="password"
-                            onChange={(e) => setPassword(e.target.value)}
+                            // onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        {showP && <FaUnlock onClick={() => setShowP(!showP)} className='absolute top-[55%] right-3' /> }
-                        {!showP && <FaLock onClick={() => setShowP(!showP)} className='absolute top-[55%] right-3' /> }
+                        {showP && <FaEye onClick={() => setShowP(!showP)} className='absolute top-[55%] right-3' /> }
+                        {!showP && <FaEyeSlash onClick={() => setShowP(!showP)} className='absolute top-[55%] right-3' /> }
                     </div>
 
                     <div className="py-1 w-full relative">
-                        <label htmlFor="confirmPassword" className="font-semibold">Confirm Password</label>
+                        <label htmlFor="confirmPassword" className="font-semibold">
+                            Confirm Password
+                        </label>
                         <input
                             type={!showCP ? "password" : "text"}
-                            value={confirmPassword}
-                            placeholder="Re-type password"
+                            // value={confirmPassword}
+                            placeholder="Re-type your password"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="confirmPassword"
                             id="confirmPassword"
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            // onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                         />
-                        {showCP && <FaUnlock onClick={() => setShowCP(!showCP)} className='absolute top-[55%] right-3' /> }
-                        {!showCP && <FaLock  onClick={() => setShowCP(!showCP)} className='absolute top-[55%] right-3' /> }
+                        {showCP && <FaEye onClick={() => setShowCP(!showCP)} className='absolute top-[55%] right-3' /> }
+                        {!showCP && <FaEyeSlash  onClick={() => setShowCP(!showCP)} className='absolute top-[55%] right-3' /> }
                     </div>
 
                     <button 
                         type="submit"
                         // onClick={() => Router.push('/login')}
-                        className="w-full bg-[#e16d17] text-white font-semibold rounded-lg my-4"
+                        className="w-full bg-[#e16d17] text-white font-semibold rounded-lg my-2"
                     >
                         Create Account
                     </button>
