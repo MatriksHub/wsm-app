@@ -1,42 +1,44 @@
 "use client"
 
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
 import React, { useState } from 'react';
 import Image from 'next/image';
 import cover_image from '../../../public/worspace.jpeg';
 import logo from '../../../public/matrikslogo.png';
 import Link from 'next/link';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { FaEnvelope, FaEye, FaEyeSlash } from 'react-icons/fa';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
+import { signIn } from 'next-auth/react';
 
-
-const FormSchema = z
-    .object({
-        email: z.string().min(1, 'Email is required').email('Invalid email'),
-        password: z
-        .string()
-        .min(1, 'Password is required')
-        .min(8, 'Password must have than 8 characters'),
-    });
   
-  const Login = () => {
+const Login = () => {
 
      // show and hide password
     const [show, setShow] = useState(false);
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-      resolver: zodResolver(FormSchema),
-      defaultValues: {
-        email: '',
-        password: '',
-      },
-    });
-  
-    const onSubmit = (values: z.infer<typeof FormSchema>) => {
-      console.log(values);
+    const router = useRouter();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        const signInData = await signIn('credentials', {
+            email,
+            password,
+            redirect: false 
+        });
+
+        console.log(signInData)
+
+        if (signInData?.error) {
+            console.log(signInData.error);
+            toast.error('something went wrong')
+        } else {
+            toast.success("Successfully signed in")
+            router.push('/dashboard/overview')
+        }
     };
     
 
@@ -68,18 +70,17 @@ const FormSchema = z
 
             <div className="w-[350px] border border-[#201b51] rounded-[5px] shadow-2xl p-8 ">
                 
-                <form onSubmit={form.handleSubmit(onSubmit)} className='w-full flex flex-col gap-3'>
+                <form onSubmit={handleLogin} className='w-full flex flex-col gap-3'>
                     <div className="py-1 w-full relative">
                         <label htmlFor="email" className="font-semibold">Email</label>
                         <input
                             type="email"
-                            // value={email}
+                            value={email}
                             placeholder="mail@example.com"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="email"
                             id="email"
-                            // onChange={(e) => setEmail(e.target.value)}
-                            required
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                         <FaEnvelope className='absolute top-[55%] right-3' />
                     </div>
@@ -88,13 +89,12 @@ const FormSchema = z
                         <label htmlFor="password" className="font-semibold">Password</label>
                         <input
                             type={!show ? "password" : "text"}
-                            // value={password}
+                            value={password}
                             placeholder="Enter your password"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="password"
                             id="password"
-                            // onChange={(e) => setPassword(e.target.value)}
-                            required
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         {show && <FaEye onClick={() => setShow(!show)} className='absolute top-[55%] right-3' />} 
                         {!show && <FaEyeSlash onClick={() => setShow(!show)} className='absolute top-[55%] right-3' />} 
