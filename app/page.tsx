@@ -1,7 +1,7 @@
 import Image from "next/image";
  import worspace from "../public/worspace.jpeg";
  import Link from "next/link";
-import matrikslogo4 from "../public/matrikslogo 4 (1).png"
+import matrikslogo4 from "../public/matrikslogo.png"
 
 
 export default function Home() {
@@ -11,8 +11,8 @@ export default function Home() {
       <div className="hidden h-full md:w-1/2 md:flex">
         <Image src={worspace} 
          alt="workspace"
-         className="w-full h-full object-cover"
-         />
+         className="w-full h-[full] object-cover"
+        />
       </div>
 
       {/* landing-page-text */}
@@ -21,7 +21,7 @@ export default function Home() {
       <div className="pb-6">
         <Image src={matrikslogo4}
         alt="matrikshublogo"
-        className="w-full h-full"
+        className="w-[150px] h-[150px]"
         />
       </div>
       <div className="flex items-center justify-center">
@@ -30,12 +30,12 @@ export default function Home() {
         </p>
       </div>
       <div className="flex gap-[30px] text-semibold text-center ">
-        <Link href="/login"
+        <Link href="/auth/login"
         className="border border-[#e16d17] border-solid px-10 py-2 text-[15px] rounded-[5px]"
         >Login
         </Link>
 
-        <Link href="/signup"
+        <Link href="/auth/signup"
         className="border bg-[#e16d17] px-8 py-2 rounded-[5px] text-[#ffffff]"
         >Create Account</Link>
       </div>
