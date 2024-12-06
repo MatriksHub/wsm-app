@@ -5,52 +5,51 @@ import { useForm } from 'react-hook-form';
 import * as z from "zod";
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from "next/link";
-// import { useRouter } from "next/navigation";
-// import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import Image from "next/image";
 import cover_image from "../../../public/worspace.jpeg";
 import logo from '../../../public/matrikslogo.png';
 import { FaEnvelope, FaEye, FaEyeSlash, FaUser } from "react-icons/fa";
-// import axios from "axios";
-
-const FormSchema = z
-  .object({
-    name: z.string().min(1, 'Name is required').max(100),
-    email: z.string().min(1, 'Email is required').email('Invalid email'),
-    password: z
-      .string()
-      .min(1, 'Password is required')
-      .min(8, 'Password must have than 8 characters'),
-    confirmPassword: z.string().min(1, 'Password confirmation is required'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Password do not match',
-  });
-
+  
 
 const SignUp = () => {
-
-    // const router = useRouter();
+    const router = useRouter();
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('')
 
     // show and hide password
     const [showP, setShowP] = useState(false);
     const [showCP, setShowCP] = useState(false);
 
-    const form = useForm<z.infer<typeof FormSchema>>({
-        resolver: zodResolver(FormSchema),
-        defaultValues: {
-          name: '',
-          email: '',
-          password: '',
-          confirmPassword: '',
-        },
-      });
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
     
-      const onSubmit = (values: z.infer<typeof FormSchema>) => {
-        console.log(values);
-      };
-
+        try {
+          if (password !== confirmPassword) {
+            toast.error('Password does not match!');
+            console.log('Password does not match');
+          }
+    
+          const formData = {name, email, password};
+    
+          const res = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          });
+    
+          if (res.ok) {
+            toast.success('Successfuly registered')
+            router.push("/auth/login");
+          }
+    
+        } catch (error) {
+          console.error("Registration failed")
+        }
+    };
 
 
   return (
@@ -81,20 +80,19 @@ const SignUp = () => {
 
             <div className="border border-[#201b51] rounded-[5px] shadow-2xl px-8 py-4">
                 
-                <form onSubmit={form.handleSubmit(onSubmit)} className='w-full flex flex-col gap-3'>
+                <form onSubmit={handleSubmit} className='w-full flex flex-col gap-3'>
                     <div className="py-1 w-full relative">
                         <label htmlFor="fullName" className="font-semibold">
                             Name
                         </label>
                         <input
                             type="text"
-                            // value={name}
+                            value={name}
                             placeholder="John Doe"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="name"
                             id="name"
-                            // onChange={(e) => setName(e.target.value)}
-                            required
+                            onChange={(e) => setName(e.target.value)}
                         />
                         <FaUser className='absolute top-[55%] right-3' />
                     </div>
@@ -105,13 +103,12 @@ const SignUp = () => {
                         </label>
                         <input
                             type="email"
-                            // value={email}
+                            value={email}
                             placeholder="mail@example.com"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="email"
                             id="email"
-                            // onChange={(e) => setEmail(e.target.value)}
-                            required
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                         <FaEnvelope className='absolute top-[55%] right-3' />
                     </div>
@@ -122,13 +119,12 @@ const SignUp = () => {
                         </label>
                         <input
                             type={!showP ? "password" : "text"}
-                            // value={password}
+                            value={password}
                             placeholder="Enter your password"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="password"
                             id="password"
-                            // onChange={(e) => setPassword(e.target.value)}
-                            required
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                         {showP && <FaEye onClick={() => setShowP(!showP)} className='absolute top-[55%] right-3' /> }
                         {!showP && <FaEyeSlash onClick={() => setShowP(!showP)} className='absolute top-[55%] right-3' /> }
@@ -140,13 +136,12 @@ const SignUp = () => {
                         </label>
                         <input
                             type={!showCP ? "password" : "text"}
-                            // value={confirmPassword}
+                            value={confirmPassword}
                             placeholder="Re-type your password"
                             className="box w-full border border-[#201b51] rounded-md outline-[#e16d17] caret-[#201b51] text-[14px]"
                             name="confirmPassword"
                             id="confirmPassword"
-                            // onChange={(e) => setConfirmPassword(e.target.value)}
-                            required
+                            onChange={(e) => setConfirmPassword(e.target.value)}
                         />
                         {showCP && <FaEye onClick={() => setShowCP(!showCP)} className='absolute top-[55%] right-3' /> }
                         {!showCP && <FaEyeSlash  onClick={() => setShowCP(!showCP)} className='absolute top-[55%] right-3' /> }
@@ -165,7 +160,7 @@ const SignUp = () => {
                             Already have an account? 
                         </span>
                         <span className=''>
-                            <Link href='/login' className=' font-extrabold text-[#e16d17] cursor-pointer'>
+                            <Link href='/auth/login' className=' font-extrabold text-[#e16d17] cursor-pointer'>
                                 Login
                             </Link>
                         </span>
