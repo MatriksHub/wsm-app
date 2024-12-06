@@ -112,7 +112,7 @@ const Login = () => {
                             Don&apos;t have an account? 
                         </span>
                         <span className=''>
-                            <Link href='/signup' className=' font-extrabold text-[#e16d17] cursor-pointer'>
+                            <Link href='/auth/signup' className=' font-extrabold text-[#e16d17] cursor-pointer'>
                                 Sign Up
                             </Link>
                         </span>
