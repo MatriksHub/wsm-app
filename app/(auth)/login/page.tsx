@@ -24,8 +24,6 @@ const FormSchema = z
   
   const Login = () => {
 
-    // const router = useRouter();
-
      // show and hide password
     const [show, setShow] = useState(false);
 
