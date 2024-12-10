@@ -18,7 +18,7 @@
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "next": "15.0.3",
-    "next-auth": "^5.0.0-beta.25",
+    "next-auth": "^4.24.11",
     "nextjs-toploader": "^3.7.15",
     "postgresql": "^0.0.1",
     "react": "19.0.0-rc-66855b96-20241106",

@@ -2,15 +2,15 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from './prisma'
 import bcrypt from "bcryptjs";
-import { NextAuthConfig } from "next-auth";
+import { NextAuthOptions } from "next-auth";
 
 
-export const authOptions: NextAuthConfig = {
+export const authOptions: NextAuthOptions = {
     adapter: PrismaAdapter(prisma),
     secret: process.env.NEXTAUTH_SECRET,
     pages: {
-        signIn: '/auth/login',
-        error: '/auth/error'
+        signIn: '/login',
+        error: '/error'
     },
     session: {
         strategy: "jwt",
@@ -28,7 +28,7 @@ export const authOptions: NextAuthConfig = {
                 }
 
                 const userExist = await prisma.user.findUnique({
-                    where: { email: credentials?.email }
+                    where: { email: credentials.email }
                 });
                 
                 if (!userExist) {
@@ -45,7 +45,7 @@ export const authOptions: NextAuthConfig = {
                     id: `${userExist.id}`, 
                     name: userExist.name, 
                     email: userExist.email, 
-                    role: userExist.role 
+                    role: userExist.role,
                 };
             },
         }),
@@ -57,6 +57,7 @@ export const authOptions: NextAuthConfig = {
             return {
                 ...token,
                 email: user.email,
+                role: user.role,
             }
           }
           return token;
@@ -67,17 +68,11 @@ export const authOptions: NextAuthConfig = {
                 ...session,
                 user: {
                     ...session.user,
-                    email: token.email
-                }
-            }
-        //   session.user = { 
-        //     id: token.id, 
-        //     role: token.role, 
-        //     email: token.email 
-        // };
-          return session;
+                    email: token.email,
+                    role: token.role,
+                },
+            };
         },
     },
-    
 }
 
