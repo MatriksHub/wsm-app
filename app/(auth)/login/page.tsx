@@ -54,6 +54,7 @@ export default function LoginPage() {
   
         if (response?.error) {
           setErrors({ general: response.error });
+          toast.error("invalid email or password")
         } else {
           toast.success("Login successfull!");
           router.push("/dashboard/overview"); // Redirect to a secure page
@@ -63,25 +64,25 @@ export default function LoginPage() {
         setLoading(false);
       }
     };
-  
+
     //button disabled
     const isButtonDisabled = !formData.email || !formData.password;
     
 
   return (
-    <div className="w-full h-auto md:h-auto md:flex bg-white text-[#201b51]">
+    <div className="w-full h-[100vh] md:flex items-center justify-center bg-white text-[#201b51]">
         
         {/* left side */} 
-        <div className="hidden md:block w-1/2 h-full">
+        <div className="hidden md:w-1/2 md:flex h-full">
             <Image
                 src={cover_image}
                 alt="cover-image"
-                className="h-[100%] object-cover"
+                className="w-full h-full object-cover"
             />
         </div>
 
         {/* right side */}
-        <div className=" w-full h-screen md:w-1/2 md:h-[100%] flex flex-col justify-center items-center gap-4 mb-3 ">
+        <div className=" w-full md:w-1/2 md:h-[100%] flex flex-col justify-center items-center gap-4 mb-3">
             <div className="flex items-center justify-center ">
                 <Link href='/' className=" mb-4 cursor-pointer">
                     <Image 
@@ -96,7 +97,7 @@ export default function LoginPage() {
                 Login
             </h1>
 
-            <div className="w-[350px] border border-[#201b51] rounded-[5px] shadow-2xl p-8 ">
+            <div className="w-[350px] border border-[#201b51] rounded-[5px] p-8 ">
                 
                 <form onSubmit={handleLogin} className='w-full flex flex-col gap-3'>
                     <div className="py-1 w-full relative">
@@ -163,5 +164,4 @@ export default function LoginPage() {
     </div>
   );
 }
-
 
