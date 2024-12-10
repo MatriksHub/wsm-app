@@ -1,7 +1,8 @@
+import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import bcrypt from 'bcryptjs'
-import { NextResponse } from "next/server";
-import * as z from 'zod'
+import * as z from 'zod';
+
 
 // Schema for input validation
 const userSchema = z
@@ -11,14 +12,16 @@ const userSchema = z
     password: z
       .string()
       .min(1, 'Password is required')
-      .min(8, 'Password must have than 8 characters'),
+      .min(6, 'Password must be at least 6 characters'),
   })
   
 export async function POST(req: Request) {
   try {
+    // SignUp Form Authentication
     const body = await req.json();
     const { name, email, password} = userSchema.parse(body);
 
+    // check if email already exists 
     const userEmailExist = await prisma.user.findUnique({
       where: {email: email}
     });
@@ -26,12 +29,14 @@ export async function POST(req: Request) {
     if (userEmailExist) {
       return NextResponse.json({
         user: null,
-        message: 'User email exist',
+        message: 'This email is already registered, please login!',
       }, { status: 409})
     }
     
+    // hash user password
     const hashedPassword = await bcrypt.hash(password, 10);
     
+    // create new user
     const newUser = await prisma.user.create({
       data: { 
         name, 
@@ -46,12 +51,17 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { 
         user: rest,
-        message: 'User created successfuly',
+        message: 'Account created successfully!',
       }, 
       { status: 201} 
     ); 
 
   } catch (error) {
-    return NextResponse.json({ message: "Something went wrong!"}, {status: 500});
-  }
+    return NextResponse.json(
+      { 
+        message: "Account creation failed, please try again!"
+      }, 
+      {status: 500}
+    );
+  };
 }
