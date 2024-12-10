@@ -65,19 +65,19 @@ export default function Register() {
 
 
   return (
-    <div className="w-full h-auto md:h-auto md:flex bg-white text-[#201b51]">
+    <div className="w-full h-[100vh] md:flex items-center justify-center bg-white text-[#201b51]">
         
         {/* left side */} 
-        <div className="hidden md:block w-1/2 h-full">
+        <div className="hidden md:w-1/2 md:flex h-full">
             <Image
                 src={cover_image}
                 alt="cover-image"
-                className="h-[100%] object-cover"
+                className="w-full h-full object-cover"
             />
         </div>
 
         {/* right side */}
-        <div className=" w-full h-screen md:w-1/2 md:h-[100%] flex flex-col justify-center items-center gap-2 mb-2">
+        <div className="w-full md:w-1/2 flex flex-col justify-center items-center gap-2 mb-2">
             <div className="flex items-center justify-center ">
                 <Link href='/' className=" mb-4 cursor-pointer">
                     <Image 
@@ -203,5 +203,4 @@ export default function Register() {
 
   );
 }
-
 
