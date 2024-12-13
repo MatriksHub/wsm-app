@@ -1,0 +1,15 @@
+{
+    "build": {
+      "env": {
+        "DATABASE_URL": "@database_url",
+        "DIRECT_URL": "@direct_url",
+        "NEXTAUTH_SECRET": "@nextauth_secret"
+      }
+    },
+    "functions": {
+      "api/**/*.ts": {
+        "includeFiles": ["node_modules/.prisma/**/*"]
+      }
+    }
+  }
+  
